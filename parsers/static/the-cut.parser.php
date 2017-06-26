@@ -1,5 +1,6 @@
 <?php
 require_once('vendor/autoload.php');
+require_once('obj/event.obj.php');
 use JonnyW\PhantomJs\Client;
 $client = Client::getInstance();
 // $client->getEngine()->setPath('/path/to/phantomjs');
@@ -15,9 +16,44 @@ if($response->getStatus() === 200 || $response->getStatus() === 301) {
     $dom->loadHTML($html);
     $finder = new DomXPath($dom);
     $classname="day ng-scope";
-    $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-    echo $html;
-    print_r($nodes);
+    $eventHtml = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+    // echo $html;
+    foreach($eventHtml as $e) {
+      $dateMonth;
+      $dateDay;
+      $eventName = "N/A";
+      $eventLocation = "N/A";
+      $eventTime;
+      $innerValue = $e->nodeValue;
+      $innerValueArray = explode("\n", $innerValue);
+      $i = 0;
+      print_r($innerValueArray);
+      foreach($innerValueArray as $d) {
+        $d = trim($d);
+        if($d !== "" && $d) {
+          if($i == 0) { // It means that this is the month
+            $dateMonth = $d;
+          }
+          else if($i == 1) {
+            $dateDay = $d;
+          }
+          else if($i == 3) {
+            $eventName = $d;
+          }
+          else if($i == 4) {
+            $eventTime = $d;
+          }
+          else if($i == 5) {
+            $eventLocation = $d;
+            $event = new Event($eventName, $dateMonth, $eventLocation);
+            print_r($event);
+            break;
+          }
+          $i++;
+        }
+      }
+      // print_r($innerValueArray);
+    }
 }
 else {
 
