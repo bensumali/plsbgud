@@ -3,18 +3,23 @@
 
 // require_once("db/config.db.php");
 class Event {
-    private $date;
+    private $dateStart;
+    private $dateEnd;
     private $name;
     private $location;
 
-    function Event($name, $date, $location) {
-      $this->date = $date;
+    function Event($name, $dateStart, $dateEnd, $location) {
+      $this->dateStart = $dateStart;
+      $this->dateEnd = $dateEnd;
       $this->name = $name;
       $this->location = $location;
     }
 
-    function getDate() {
-      return $this->date;
+    function getDateStart() {
+      return $this->dateStart;
+    }
+    function getDateEnd() {
+      return $this->dateEnd;
     }
     function getName() {
       return $this->name;
@@ -22,8 +27,11 @@ class Event {
     function getLocation() {
       return $this->location;
     }
-    function setDate($date) {
-      $this->date = $date;
+    function setDateStart($dateStart) {
+      $this->dateStart = $dateStart;
+    }
+    function setDateEnd($dateEnd) {
+      $this->dateEnd = $dateEnd;
     }
     function setName($name) {
       $this->name = $name;
